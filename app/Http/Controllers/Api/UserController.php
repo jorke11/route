@@ -31,11 +31,6 @@ class UserController extends Controller {
         return response()->json(['user' => Auth::user()]);
     }
 
-    public function getPark($id) {
-        $data = Parks::where("stakeholder_id", $id)->get();
-        return response()->json(['data' => $data]);
-    }
-
     public function newStakeholder(Request $req) {
         $in = $req->all();
         $in["password"] = bcrypt($in["password"]);
@@ -54,33 +49,4 @@ class UserController extends Controller {
             return response()->json(['msg' => 'Email de ' . $stakeholder . ' ya existe!', "status" => false]);
         }
     }
-
-    public function newPark(Request $req) {
-        $in = $req->all();
-
-        $res = Parks::create($in);
-
-        if ($res) {
-            $data = Parks::where("stakeholder_id", $in["stakeholder_id"])->get();
-            return response()->json(['msg' => 'creado!', "status" => true, "data" => $data]);
-        } else {
-            return response()->json(['msg' => 'Problemas con la ejecución!', "status" => false]);
-        }
-    }
-
-    public function update(Request $req, $id) {
-        $in = $req->all();
-
-        $row = Parks::find($id);
-        $row->fill($in)->save();
-
-
-        if ($row) {
-            $row = Parks::find($id);
-            return response()->json(['msg' => 'creado!', "status" => true, "row" => $row]);
-        } else {
-            return response()->json(['msg' => 'Problemas con la ejecución!', "status" => false]);
-        }
-    }
-
 }

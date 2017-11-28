@@ -23,9 +23,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['namespace' => 'Api'], function () {
     Route::post('/user/login', 'UserController@login');
     Route::post('/newStakeholder', 'UserController@newStakeholder');
-    Route::post('/newPark', 'UserController@newPark');
-    Route::put('/editPark/{id}/edit', 'UserController@update');
     Route::get('/details', 'UserController@details')->middleware('auth:api');
-    Route::get('/getPark/{id}', 'UserController@getPark')->middleware('auth:api');
-    Route::resource("binnacle", "BinnacleController");
+    
+    Route::post('/newPark', 'ParkController@newPark')->middleware('auth:api');
+    Route::post('/reservePark', 'ParkController@reservePark')->middleware('auth:api');
+    Route::put('/editPark/{id}/edit', 'ParkController@update')->middleware('auth:api');
+    Route::get('/getPark/{id}', 'ParkController@getPark')->middleware('auth:api');
+    Route::get('getParks', 'ParkController@getParks')->middleware('auth:api');
+//    Route::resource("binnacle", "BinnacleController");
 });
+

@@ -11,12 +11,13 @@ use App\Models\Operation\Parks;
 class UserController extends Controller {
 
     public function login(Request $req) {
-     
+
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $email = request('email');
             $user = Auth::user();
             $this->content['token'] = $user->createToken($email)->accessToken;
             $this->content['success'] = true;
+            $this->content['role_id'] = $user->role_id;
             $status = 200;
         } else {
             $this->content['error'] = "Unauthorised";
@@ -33,13 +34,16 @@ class UserController extends Controller {
 
     public function newStakeholder(Request $req) {
         $in = $req->all();
+        
         $in["password"] = bcrypt($in["password"]);
         $valida = User::where("email", request("email"))->get();
 
-        if ($in["role_id"] == 2) {
+        if ($in["role_id"] == 'client') {
             $stakeholder = "client";
-        } else if ($in["role_id"] == 3) {
+            $in["role_id"] = 1;
+        } else {
             $stakeholder = "proveedor";
+            $in["role_id"] = 2;
         }
 
         if (count($valida) == 0) {
@@ -49,4 +53,5 @@ class UserController extends Controller {
             return response()->json(['msg' => 'Email de ' . $stakeholder . ' ya existe!', "status" => false]);
         }
     }
+
 }

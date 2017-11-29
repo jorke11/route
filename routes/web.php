@@ -26,10 +26,15 @@ Route::group(['namespace' => 'Api'], function () {
     Route::get('/details', 'UserController@details')->middleware('auth:api');
     
     Route::post('/newPark', 'ParkController@newPark')->middleware('auth:api');
-    Route::post('/reservePark', 'ParkController@reservePark')->middleware('auth:api');
+    
     Route::put('/editPark/{id}/edit', 'ParkController@update')->middleware('auth:api');
+    Route::delete('park/{id}', 'ParkController@delete')->middleware('auth:api');
     Route::get('/getPark/{id}', 'ParkController@getPark')->middleware('auth:api');
     Route::get('getParks', 'ParkController@getParks')->middleware('auth:api');
 //    Route::resource("binnacle", "BinnacleController");
+    
+    Route::post('/reservePark', 'OrdersController@reservePark')->middleware('auth:api');
+    Route::get('/getOrders', 'OrdersController@getOrders')->middleware('auth:api');
+    Route::put('cancel/{id}', 'OrdersController@cancelOrder')->middleware('auth:api');
 });
 

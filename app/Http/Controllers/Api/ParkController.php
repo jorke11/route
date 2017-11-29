@@ -23,7 +23,6 @@ class ParkController extends Controller {
         $data = Parks::all();
         return response()->json(['data' => $data]);
     }
- 
 
     public function update(Request $req, $id) {
         $in = $req->all();
@@ -68,19 +67,20 @@ class ParkController extends Controller {
         $res = Parks::create($in)->id;
         $manager = new ImageManager(array('driver' => 'imagick'));
         $image = $manager->make($img)->widen(500);
-
-        $path = public_path() . "/images/parks/";
-        $pathsys = "images/parks/";
+        if ($image != null) {
+            $path = public_path() . "/images/parks/";
+            $pathsys = "images/parks/";
 //        $res = File::makeDirectory($path, $mode = 0777, true, true);
-        
-        $pathsys .= $res.".jpg";
-        $path .= $res."park.jpg";
+
+            $pathsys .= $res . ".jpg";
+            $path .= $res . "park.jpg";
 //        chmod($path, 0777);
-        $image->save($path);
-        $in["img"] = url($pathsys);
-        $row = Parks::find($res);
-        $row->img = $in["img"];
-        $row->save();
+            $image->save($path);
+            $in["img"] = url($pathsys);
+            $row = Parks::find($res);
+            $row->img = $in["img"];
+            $row->save();
+        }
 
         if ($res) {
             $data = Parks::where("stakeholder_id", $in["stakeholder_id"])->get();

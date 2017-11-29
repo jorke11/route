@@ -69,11 +69,12 @@ class ParkController extends Controller {
         $manager = new ImageManager(array('driver' => 'imagick'));
         $image = $manager->make($img)->widen(500);
 
-        $path = "images/parks/" . $res . "/";
-        $pathsys = "images/parks/" . $res . "/";
-        File::makeDirectory($path, $mode = 0777, true, true);
-        $pathsys .= "park.jpg";
-        $path .= "park.jpg";
+        $path = public_path() . "/images/parks/" . $res . "/";
+        $pathsys = "images/parks/";
+//        $res = File::makeDirectory($path, $mode = 0777, true, true);
+        
+        $pathsys .= $res.".jpg";
+        $path .= $res."park.jpg";
 //        chmod($path, 0777);
         $image->save($path);
         $in["img"] = url($pathsys);

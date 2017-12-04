@@ -57,18 +57,19 @@ class ParkController extends Controller {
         $in = $req->all();
 
         if (!isset($in["img"])) {
-            $img='';
+            $img = '';
         } else {
             $img = $in["img"];
         }
-        
+
         unset($in["img"]);
 
         $res = Parks::create($in)->id;
-        if ($image != '') {
+
         $manager = new ImageManager(array('driver' => 'imagick'));
         $image = $manager->make($img)->widen(500);
-        
+        if ($image != '') {
+
             $path = public_path() . "/images/parks/";
             $pathsys = "images/parks/";
 //        $res = File::makeDirectory($path, $mode = 0777, true, true);

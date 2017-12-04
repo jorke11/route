@@ -61,7 +61,7 @@ class ParkController extends Controller {
         } else {
             $img = $in["img"];
         }
-
+        
         unset($in["img"]);
 
         $res = Parks::create($in)->id;

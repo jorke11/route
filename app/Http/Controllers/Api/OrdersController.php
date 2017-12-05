@@ -41,6 +41,7 @@ class OrdersController extends Controller {
         } else {
             
             $parks = Parks::where("stakeholder_id", Auth::user()->id)->get();
+            dd($parks);
             $sql->whereIn("orders.park_id", $parks);
         }
 

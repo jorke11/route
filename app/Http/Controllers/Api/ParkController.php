@@ -21,7 +21,7 @@ class ParkController extends Controller {
     }
 
     public function getParks() {
-        $data = Parks::select("id","address","latitude","longitude","value",DB::raw("available-coalesce(current,0) as available"));
+        $data = Parks::select("id","address","latitude","longitude","value",DB::raw("available-coalesce(current,0) as available"))->get();
         
         return response()->json(['data' => $data]);
     }

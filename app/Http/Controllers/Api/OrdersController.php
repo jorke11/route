@@ -15,8 +15,8 @@ class OrdersController extends Controller {
         $in = $req->all();
         $row = Parks::find($in["id"]);
 
-        if ($row->available > 0) {
-            $row->available = $row->available - 1;
+        if (($row->available - $row->current) > 0) {
+            $row->current = $row->current - 1;
             $row->save();
 
             $new["user_id"] = Auth::user()->id;
@@ -31,13 +31,23 @@ class OrdersController extends Controller {
     }
 
     public function getOrders() {
-        $data = Orders::select("orders.id", "users.name", "users.last_name", 
-                "parks.address", DB::raw("CASE WHEN orders.status_id = 1 tHEN FALSE ELSE TRUE END as status_id"), "orders.created",
-                DB::raw("CASE WHEN orders.status_id = 1 THEN 'Nuevo' WHEN orders.status_id = 2 THEN 'Completado' ELSE 'Cancelado' END as status"))
-                        ->join("users", "users.id", "orders.user_id")
-                        ->join("parks", "parks.id", "orders.park_id")
-                        ->where("orders.user_id", Auth::user()->id)
-                        ->orderBy("orders.id", "desc")->get();
+
+        $sql = Orders::select("orders.id", "users.name", "users.last_name", "parks.address", DB::raw("CASE WHEN orders.status_id = 1 tHEN FALSE ELSE TRUE END as status_id"), "orders.created", DB::raw("CASE WHEN orders.status_id = 1 THEN 'Nuevo' WHEN orders.status_id = 2 THEN 'Completado' ELSE 'Cancelado' END as status"))
+                ->join("users", "users.id", "orders.user_id")
+                ->join("parks", "parks.id", "orders.park_id");
+
+        if (Auth::user()->role_id == 2) {
+            $sql->where("orders.user_id", Auth::user()->id);
+        } else {
+            
+            $parks = Parks::where("stakeholder_id", Auth::user()->id)->get();
+            $sql->whereIn("orders.park_id", $parks);
+        }
+
+
+
+        $data = $sql->orderBy("orders.id", "desc")->get();
+
         return response()->json(['data' => $data]);
     }
 
@@ -46,7 +56,7 @@ class OrdersController extends Controller {
         $row->status_id = 3;
         $row->leaved = date("Y-m-d H:i:s");
         $row->save();
-        return response()->json(['status' =>true , "row" => $row]);
+        return response()->json(['status' => true, "row" => $row]);
     }
 
 }

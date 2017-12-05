@@ -57,7 +57,7 @@ class OrdersController extends Controller {
         return response()->json(['status' => true, "row" => $row]);
     }
 
-    public function ConfirmOrder(Request $req, $id) {
+    public function ConfirmOrder(Request $req) {
         $in = $req->all();
         $row = Orders::find($in["id"]);
         $row->status_id = 2;

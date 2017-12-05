@@ -31,21 +31,17 @@ class OrdersController extends Controller {
     }
 
     public function getOrders() {
-
+        
         $sql = Orders::select("orders.id", "users.name", "users.last_name", "parks.address", DB::raw("CASE WHEN orders.status_id = 1 tHEN FALSE ELSE TRUE END as status_id"), "orders.created", DB::raw("CASE WHEN orders.status_id = 1 THEN 'Nuevo' WHEN orders.status_id = 2 THEN 'Completado' ELSE 'Cancelado' END as status"))
                 ->join("users", "users.id", "orders.user_id")
                 ->join("parks", "parks.id", "orders.park_id");
         dd(Auth::user());
-        if (Auth::user()->role_id == 2) {
+        if (Auth::user()->role_id == 1) {
             $sql->where("orders.user_id", Auth::user()->id);
         } else {
-            
             $parks = Parks::where("stakeholder_id", Auth::user()->id)->get();
-            dd($parks);
             $sql->whereIn("orders.park_id", $parks);
         }
-
-
 
         $data = $sql->orderBy("orders.id", "desc")->get();
 

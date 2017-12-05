@@ -35,7 +35,7 @@ class OrdersController extends Controller {
         $sql = Orders::select("orders.id", "users.name", "users.last_name", "parks.address", DB::raw("CASE WHEN orders.status_id = 1 tHEN FALSE ELSE TRUE END as status_id"), "orders.created", DB::raw("CASE WHEN orders.status_id = 1 THEN 'Nuevo' WHEN orders.status_id = 2 THEN 'Completado' ELSE 'Cancelado' END as status"))
                 ->join("users", "users.id", "orders.user_id")
                 ->join("parks", "parks.id", "orders.park_id");
-        dd(Auth::user());
+        
         if (Auth::user()->role_id == 1) {
             $sql->where("orders.user_id", Auth::user()->id);
         } else {

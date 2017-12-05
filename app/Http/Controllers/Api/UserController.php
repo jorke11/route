@@ -21,7 +21,7 @@ class UserController extends Controller {
 //            $status = 200;
         } else {
             $this->content['error'] = "Unauthorised";
-            $this->content['success'] = false;
+            $this->content['status'] = false;
 //            $status = 401;
         }
 

@@ -75,7 +75,7 @@ class ParkController extends Controller {
 //        $res = File::makeDirectory($path, $mode = 0777, true, true);
 
             $pathsys .= $res . ".jpg";
-            $path .= $res . "park.jpg";
+            $path .= $res . ".jpg";
             $image->save($path);
             $in["img"] = url($pathsys);
             $row = Parks::find($res);

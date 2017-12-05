@@ -61,9 +61,11 @@ class OrdersController extends Controller {
         $in = $req->all();
         $row = Orders::find($in["id"]);
         $row->status_id = 2;
-        $row->current += 1;
         $row->leaved = date("Y-m-d H:i:s");
         $row->save();
+        $p = Parks::find($row->park_id);
+        $p->current+=1;
+        $p->save();
         return response()->json(['status' => true, "row" => $row]);
     }
 

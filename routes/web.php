@@ -35,6 +35,7 @@ Route::group(['namespace' => 'Api'], function () {
     
     Route::post('/reservePark', 'OrdersController@reservePark')->middleware('auth:api');
     Route::get('/getOrders', 'OrdersController@getOrders')->middleware('auth:api');
-    Route::put('cancel/{id}', 'OrdersController@cancelOrder')->middleware('auth:api');
+    Route::post('cancel', 'OrdersController@cancelOrder')->middleware('auth:api');
+    Route::post('confirm', 'OrdersController@ConfirmOrder')->middleware('auth:api');
 });
 

@@ -31,11 +31,11 @@ class OrdersController extends Controller {
     }
 
     public function getOrders() {
-        
+
         $sql = Orders::select("orders.id", "users.name", "users.last_name", "parks.address", DB::raw("CASE WHEN orders.status_id = 1 tHEN FALSE ELSE TRUE END as status_id"), "orders.created", DB::raw("CASE WHEN orders.status_id = 1 THEN 'Nuevo' WHEN orders.status_id = 2 THEN 'Completado' ELSE 'Cancelado' END as status"))
                 ->join("users", "users.id", "orders.user_id")
                 ->join("parks", "parks.id", "orders.park_id");
-        
+
         if (Auth::user()->role_id == 1) {
             $sql->where("orders.user_id", Auth::user()->id);
         } else {
@@ -48,9 +48,20 @@ class OrdersController extends Controller {
         return response()->json(['data' => $data]);
     }
 
-    public function cancelOrder(Request $req, $id) {
-        $row = Orders::find($id);
+    public function cancelOrder(Request $req) {
+        $in = $req->all();
+        $row = Orders::find($in["id"]);
         $row->status_id = 3;
+        $row->leaved = date("Y-m-d H:i:s");
+        $row->save();
+        return response()->json(['status' => true, "row" => $row]);
+    }
+
+    public function ConfirmOrder(Request $req, $id) {
+        $in = $req->all();
+        $row = Orders::find($in["id"]);
+        $row->status_id = 2;
+        $row->current += 1;
         $row->leaved = date("Y-m-d H:i:s");
         $row->save();
         return response()->json(['status' => true, "row" => $row]);

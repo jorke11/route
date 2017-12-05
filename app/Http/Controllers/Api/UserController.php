@@ -16,16 +16,16 @@ class UserController extends Controller {
             $email = request('email');
             $user = Auth::user();
             $this->content['token'] = $user->createToken($email)->accessToken;
-            $this->content['success'] = true;
+            $this->content['status'] = true;
             $this->content['role_id'] = $user->role_id;
-            $status = 200;
+//            $status = 200;
         } else {
             $this->content['error'] = "Unauthorised";
             $this->content['success'] = false;
-            $status = 401;
+//            $status = 401;
         }
 
-        return response()->json($this->content, $status);
+        return response()->json($this->content);
     }
 
     public function details() {

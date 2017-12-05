@@ -78,12 +78,8 @@ class OrdersController extends Controller {
                 ";
         $data = DB::select($sql);
 
-        $res = array();
-        if (count($data) > 0) {
-            $res = $data[0];
-        }
-        
-        return response()->json(['quantity' => $res]);
+               
+        return response()->json(['quantity' => $data]);
     }
 
 }

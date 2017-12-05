@@ -39,7 +39,7 @@ class OrdersController extends Controller {
         if (Auth::user()->role_id == 1) {
             $sql->where("orders.user_id", Auth::user()->id);
         } else {
-            $parks = Parks::where("stakeholder_id", Auth::user()->id)->get();
+            $parks = Parks::select("id")->where("stakeholder_id", Auth::user()->id)->get()->toArray();
             $sql->whereIn("orders.park_id", $parks);
         }
 

@@ -32,7 +32,7 @@ function Home() {
             success: function (resp) {
                 var html = "";
                 $.each(resp.quantity, function (i, val) {
-                    html += "<tr><td>" + val.role_id + "</td><td>" + val.total + "</td></tr>";
+                    html += "<tr><td>" + val.status + "</td><td>" + val.count + "</td></tr>";
                 })
 
                 $("#tblOrders tbody").html(html);

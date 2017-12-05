@@ -63,8 +63,7 @@ class ParkController extends Controller {
         }
 
         unset($in["img"]);
-        echo "asdasd";
-        exit;
+        
         $res = Parks::create($in)->id;
 
 

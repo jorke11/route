@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-
 class CreateParksTable extends Migration {
 
     /**
@@ -22,6 +21,7 @@ class CreateParksTable extends Migration {
             $table->integer('available');
             $table->text('img')->nullable();
             $table->text('address');
+            $table->integer('current')->nullable();
             $table->timestamps();
         });
     }

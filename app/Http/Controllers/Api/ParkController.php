@@ -20,7 +20,8 @@ class ParkController extends Controller {
     }
 
     public function getParks() {
-        $data = Parks::all();
+        $data = Parks::select("id","address","latitude","longitude","value",DB::raw("available-coalesce(current,0) as available"));
+        
         return response()->json(['data' => $data]);
     }
 
@@ -66,10 +67,9 @@ class ParkController extends Controller {
         
         $res = Parks::create($in)->id;
 
-
         if ($img != '') {
             $manager = new ImageManager(array('driver' => 'imagick'));
-            $image = $manager->make($img)->widen(500);
+            $image = $manager->make($img)->widen(400);
             $path = public_path() . "/images/parks/";
             $pathsys = "images/parks/";
 //        $res = File::makeDirectory($path, $mode = 0777, true, true);

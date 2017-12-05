@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Auth;
 use App\User;
 use App\Models\Operation\Parks;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller {
 
@@ -32,9 +33,23 @@ class UserController extends Controller {
         return response()->json(['user' => Auth::user()]);
     }
 
+    public function getAllStakeholder() {
+        $sql = "select CASE WHEN role_id=1 THEN 'client' ELSE 'Proveedor' END role_id,count(*) as total
+                from users 
+                where created_at BETWEEN '" . date("Y-m-") . "01 00:00' and '" . date("Y-m-d H:i") . "'
+                group by role_id";
+        $data = DB::select($sql);
+        
+        $res = array();
+        if (count($data) > 0) {
+            $res = $data[0];
+        }
+        return response()->json(['quantity' => $res]);
+    }
+
     public function newStakeholder(Request $req) {
         $in = $req->all();
-        
+
         $in["password"] = bcrypt($in["password"]);
         $valida = User::where("email", request("email"))->get();
 

@@ -10,6 +10,7 @@
   | contains the "web" middleware group. Now create something great!
   |
  */
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,4 +39,8 @@ Route::group(['namespace' => 'Api'], function () {
     Route::post('cancel', 'OrdersController@cancelOrder')->middleware('auth:api');
     Route::post('confirm', 'OrdersController@ConfirmOrder')->middleware('auth:api');
 });
+
+ Route::get('getAllParks', 'Api\ParkController@getAllParks');
+ Route::get('getAllStakeholder', 'Api\UserController@getAllStakeholder');
+ Route::get('getAllOrders', 'Api\OrdersController@getAllOrders');
 

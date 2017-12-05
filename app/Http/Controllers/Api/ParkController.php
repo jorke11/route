@@ -25,6 +25,13 @@ class ParkController extends Controller {
         
         return response()->json(['data' => $data]);
     }
+    
+    public function getAllParks() {
+        $sql="select count(*) from parks where created_at BETWEEN '".date("Y-m-")."01 00:00' and '".date("Y-m-d H:i")."'";
+//        echo $sql;exit;
+        $data = DB::select($sql);    
+        return response()->json(['quantity' => $data[0]]);
+    }
 
     public function update(Request $req, $id) {
         $in = $req->all();

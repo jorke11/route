@@ -64,9 +64,26 @@ class OrdersController extends Controller {
         $row->leaved = date("Y-m-d H:i:s");
         $row->save();
         $p = Parks::find($row->park_id);
-        $p->current+=1;
+        $p->current += 1;
         $p->save();
         return response()->json(['status' => true, "row" => $row]);
+    }
+
+    public function getAllOrders() {
+        $sql = "
+            select CASE status_id WHEN 1 THEN 'Nuevo' WHEN 2 THEN 'Confirmado' WHEN 3 THEN 'Cancelado' END status,count(*) 
+            from orders
+            where created_at BETWEEN '" . date("Y-m-") . "01 00:00' and '" . date("Y-m-d H:i") . "'
+            group by 1
+                ";
+        $data = DB::select($sql);
+
+        $res = array();
+        if (count($data) > 0) {
+            $res = $data[0];
+        }
+        
+        return response()->json(['quantity' => $res]);
     }
 
 }
